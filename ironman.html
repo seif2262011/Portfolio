@@ -1,0 +1,307 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>IronMan Face Python Code</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #1a2a6c, #b21f1f, #fdbb2d);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+        
+        .container {
+            background: rgba(34, 34, 59, 0.95);
+            border-radius: 18px;
+            box-shadow: 0 12px 32px rgba(0, 0, 0, 0.25);
+            padding: 35px;
+            max-width: 800px;
+            width: 95%;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .container::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 5px;
+            background: linear-gradient(90deg, #00ffcc, #0077ff, #ff00cc);
+        }
+        
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 25px;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+        
+        h1 {
+            color: #00ffcc;
+            font-weight: 700;
+            letter-spacing: 1px;
+            font-size: 2.2rem;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+        }
+        
+        .controls {
+            display: flex;
+            gap: 15px;
+        }
+        
+        .copy-btn {
+            background: linear-gradient(135deg, #00ccff, #0077ff);
+            color: white;
+            border: none;
+            border-radius: 50px;
+            padding: 12px 25px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 12px rgba(0, 119, 255, 0.3);
+        }
+        
+        .copy-btn:hover {
+            background: linear-gradient(135deg, #00e6ff, #0066ff);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 15px rgba(0, 119, 255, 0.4);
+        }
+        
+        .copy-btn:active {
+            transform: translateY(1px);
+        }
+        
+        .copy-btn.copied {
+            background: linear-gradient(135deg, #00ff88, #00cc66);
+        }
+        
+        .copy-btn.copied::after {
+            content: 'Copied!';
+        }
+        
+        .code-container {
+            position: relative;
+        }
+        
+        .code-block {
+            background: #1e1e2e;
+            color: #e0e0e0;
+            border-radius: 12px;
+            padding: 25px;
+            font-size: 0.95rem;
+            overflow-x: auto;
+            box-shadow: inset 0 0 15px rgba(0, 0, 0, 0.5);
+            max-height: 70vh;
+            line-height: 1.5;
+            position: relative;
+        }
+        
+        .code-block code {
+            font-family: 'Fira Code', 'Consolas', 'Menlo', 'Monaco', monospace;
+            display: block;
+            white-space: pre;
+        }
+        
+        .features {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 25px;
+            color: #a0a0c0;
+            font-size: 0.9rem;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+        
+        .feature {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .feature i {
+            color: #00ffcc;
+        }
+        
+        .language-tag {
+            position: absolute;
+            top: 10px;
+            right: 20px;
+            background: rgba(0, 255, 204, 0.15);
+            color: #00ffcc;
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 600;
+        }
+        
+        /* Scrollbar styling */
+        .code-block::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+        
+        .code-block::-webkit-scrollbar-track {
+            background: #2a2a3a;
+            border-radius: 10px;
+        }
+        
+        .code-block::-webkit-scrollbar-thumb {
+            background: #00ccff;
+            border-radius: 10px;
+        }
+        
+        .code-block::-webkit-scrollbar-thumb:hover {
+            background: #00aaff;
+        }
+        
+        @media (max-width: 600px) {
+            .container {
+                padding: 25px 15px;
+            }
+            
+            h1 {
+                font-size: 1.8rem;
+            }
+            
+            .copy-btn {
+                padding: 10px 20px;
+                font-size: 0.9rem;
+            }
+            
+            .code-block {
+                padding: 20px 15px;
+                font-size: 0.85rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1><i class="fas fa-code"></i>IronMan Face Python Code</h1>
+            <div class="controls">
+                <button id="copyButton" class="copy-btn">
+                    <i class="fas fa-copy"></i> Copy Code
+                </button>
+            </div>
+        </div>
+        
+        <div class="code-container">
+            <span class="language-tag">Python</span>
+            <pre class="code-block"><code>
+import turtle 
+
+face_one = [
+  [(-40, 120), (-70, 260), (-130, 230), (-170, 200), (-170, 100), (-160, 40), (-170, 10), (-150, -10), (-140, 10),(-40, -20), (0, -20)],
+  [(0, -20), (40, -20), (140, 10), (150, -10), (170, 10), (160, 40), (170, 100), (170, 200), (130, 230), (70, 260),(40, 120), (0, 120)]
+]
+
+face_two = [
+  [(-40, -30), (-50, -40), (-100, -46), (-130, -40), (-176, 0), (-186, -30), (-186, -40), (-120, -170), (-110, -210),(-80, -230), (-64, -210), (0, -210)],
+  [(0, -210), (64, -210), (80, -230), (110, -210), (120, -170), (186, -40), (186, -30), (176, 0), (130, -40),(100, -46), (50, -40), (40, -30), (0, -30)]
+]
+
+face_three = [
+  [(-60, -220), (-80, -240), (-110, -220), (-120, -250), (-90, -280), (-60, -260), (-30, -260), (-20, -250),(0, -250)],
+  [(0, -250), (20, -250), (30, -260), (60, -260), (90, -280), (120, -250), (110, -220), (80, -240), (60, -220),(0,-220)]
+]
+
+turtle.hideturtle()
+turtle.bgcolor('red')
+turtle.setup(500, 600)
+
+face_one_start = (0, 120)
+face_two_start = (0, -30)
+face_three_start = (0, -220)
+
+turtle.speed(4)
+
+def draw_face(face_details_list, start_point):
+    turtle.penup()
+    turtle.goto(start_point)
+    turtle.pendown()
+    turtle.color('yellow')
+    turtle.begin_fill()
+
+    for i in range(len(face_details_list[0])):
+        x, y = face_details_list[0][i]
+        turtle.goto(x, y)
+
+    for i in range(len(face_details_list[1])):
+        x, y = face_details_list[1][i]
+        turtle.goto(x, y)
+    
+    turtle.end_fill()
+
+draw_face(face_one, face_one_start)
+draw_face(face_two, face_two_start)
+draw_face(face_three, face_three_start)
+
+# Keep the window open until manually closed
+turtle.done()
+            </code></pre>
+        </div>
+        
+        <div class="features">
+            <div class="feature">
+                <i class="fas fa-desktop"></i>
+                <span>Responsive Design</span>
+            </div>
+            <div class="feature">
+                <i class="fas fa-clipboard-check"></i>
+                <span>Copy to Clipboard</span>
+            </div>
+            <div class="feature">
+                <i class="fas fa-code"></i>
+                <span>Syntax Highlighted</span>
+            </div>
+            <div class="feature">
+                <i class="fas fa-scroll"></i>
+                <span>Scrollable Code</span>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.getElementById('copyButton').addEventListener('click', function() {
+            const codeElement = document.querySelector('.code-block code');
+            const textArea = document.createElement('textarea');
+            textArea.value = codeElement.textContent;
+            document.body.appendChild(textArea);
+            textArea.select();
+            document.execCommand('copy');
+            document.body.removeChild(textArea);
+            
+            // Visual feedback
+            const button = this;
+            button.classList.add('copied');
+            button.innerHTML = '<i class="fas fa-check"></i> ';
+            
+            setTimeout(() => {
+                button.classList.remove('copied');
+                button.innerHTML = '<i class="fas fa-copy"></i> Copy Code';
+            }, 2000);
+        });
+    </script>
+</body>
+</html>

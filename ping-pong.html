@@ -1,0 +1,647 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ping Pong Game Python Code</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #1a2a6c, #b21f1f, #fdbb2d);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+        
+        .container {
+            background: rgba(34, 34, 59, 0.95);
+            border-radius: 18px;
+            box-shadow: 0 12px 32px rgba(0, 0, 0, 0.25);
+            padding: 35px;
+            max-width: 800px;
+            width: 95%;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .container::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 5px;
+            background: linear-gradient(90deg, #00ffcc, #0077ff, #ff00cc);
+        }
+        
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 25px;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+        
+        h1 {
+            color: #00ffcc;
+            font-weight: 700;
+            letter-spacing: 1px;
+            font-size: 2.2rem;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+        }
+        
+        .controls {
+            display: flex;
+            gap: 15px;
+        }
+        
+        .copy-btn {
+            background: linear-gradient(135deg, #00ccff, #0077ff);
+            color: white;
+            border: none;
+            border-radius: 50px;
+            padding: 12px 25px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 12px rgba(0, 119, 255, 0.3);
+        }
+        
+        .copy-btn:hover {
+            background: linear-gradient(135deg, #00e6ff, #0066ff);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 15px rgba(0, 119, 255, 0.4);
+        }
+        
+        .copy-btn:active {
+            transform: translateY(1px);
+        }
+        
+        .copy-btn.copied {
+            background: linear-gradient(135deg, #00ff88, #00cc66);
+        }
+        
+        .copy-btn.copied::after {
+            content: 'Copied!';
+        }
+        
+        .code-container {
+            position: relative;
+        }
+        
+        .code-block {
+            background: #1e1e2e;
+            color: #e0e0e0;
+            border-radius: 12px;
+            padding: 25px;
+            font-size: 0.95rem;
+            overflow-x: auto;
+            box-shadow: inset 0 0 15px rgba(0, 0, 0, 0.5);
+            max-height: 70vh;
+            line-height: 1.5;
+            position: relative;
+        }
+        
+        .code-block code {
+            font-family: 'Fira Code', 'Consolas', 'Menlo', 'Monaco', monospace;
+            display: block;
+            white-space: pre;
+        }
+        
+        .features {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 25px;
+            color: #a0a0c0;
+            font-size: 0.9rem;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+        
+        .feature {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .feature i {
+            color: #00ffcc;
+        }
+        
+        .language-tag {
+            position: absolute;
+            top: 10px;
+            right: 20px;
+            background: rgba(0, 255, 204, 0.15);
+            color: #00ffcc;
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 600;
+        }
+        
+        /* Scrollbar styling */
+        .code-block::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+        
+        .code-block::-webkit-scrollbar-track {
+            background: #2a2a3a;
+            border-radius: 10px;
+        }
+        
+        .code-block::-webkit-scrollbar-thumb {
+            background: #00ccff;
+            border-radius: 10px;
+        }
+        
+        .code-block::-webkit-scrollbar-thumb:hover {
+            background: #00aaff;
+        }
+        
+        @media (max-width: 600px) {
+            .container {
+                padding: 25px 15px;
+            }
+            
+            h1 {
+                font-size: 1.8rem;
+            }
+            
+            .copy-btn {
+                padding: 10px 20px;
+                font-size: 0.9rem;
+            }
+            
+            .code-block {
+                padding: 20px 15px;
+                font-size: 0.85rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1><i class="fas fa-code"></i>Ping Pong Game Python Code</h1>
+            <div class="controls">
+                <button id="copyButton" class="copy-btn">
+                    <i class="fas fa-copy"></i> Copy Code
+                </button>
+            </div>
+        </div>
+        
+        <div class="code-container">
+            <span class="language-tag">Python</span>
+            <pre class="code-block"><code>
+import turtle
+import time
+import random
+import math
+
+# --- MENU ---
+print("\n" + "="*40)
+print("✨ NEON PING PONG".center(40))
+print("="*40)
+print("1. Play with a friend")
+print("2. Play with computer")
+while True:
+    mode = input("\nChoose mode (1 or 2): ").strip()
+    if mode in ("1", "2"):
+        break
+    else:
+        print("Invalid input")
+
+if mode == "2":
+    print("\nChoose computer level:")
+    print("1. Easy")
+    print("2. Medium")
+    print("3. Hard")
+    while True:
+        level = input("Enter level (1, 2, or 3): ").strip()
+        if level in ("1", "2", "3"):
+            level = int(level)
+            break
+        else:
+            print("Invalid input")
+else:
+    level = None
+
+# --- TURTLE SETUP ---
+wind = turtle.Screen()
+wind.title("⚡ NEON PING PONG")
+wind.bgcolor("#0a0a1a")
+wind.setup(width=800, height=600)
+wind.tracer(0)
+wind.cv.config(borderwidth=0, highlightthickness=0)
+
+# --- MODERN CENTER LINE (FULL HEIGHT) ---
+def create_dashed_line():
+    dashes = turtle.Turtle()
+    dashes.hideturtle()
+    dashes.penup()
+    dashes.goto(0, 300)
+    dashes.setheading(-90)
+    dashes.width(3)
+    dashes.pencolor("#00ffff")
+    
+    # Draw dashes all the way down the screen
+    for _ in range(30):  # Increased number of dashes to cover full height
+        dashes.pendown()
+        dashes.forward(10)  # Smaller segments for denser pattern
+        dashes.penup()
+        dashes.forward(10)
+    return dashes
+
+dashed_line = create_dashed_line()
+
+# --- PARTICLE EFFECT CLASS ---
+class Particle:
+    def __init__(self, x, y, color):
+        self.turtle = turtle.Turtle()
+        self.turtle.hideturtle()
+        self.turtle.penup()
+        self.turtle.goto(x, y)
+        self.turtle.shape("circle")
+        self.turtle.color(color)
+        self.turtle.shapesize(0.3)
+        self.turtle.showturtle()
+        self.lifetime = random.randint(10, 20)
+        self.velocity = [random.uniform(-1, 1), random.uniform(-0.5, 1)]
+        
+    def update(self):
+        self.lifetime -= 1
+        if self.lifetime <= 0:
+            self.turtle.hideturtle()
+            self.turtle.clear()
+            return False
+            
+        x, y = self.turtle.position()
+        self.turtle.goto(x + self.velocity[0], y + self.velocity[1])
+        alpha = self.lifetime / 20
+        # Ensure size never reaches zero
+        new_size = max(0.01, 0.3 * alpha)
+        self.turtle.shapesize(new_size)
+        return True
+
+particles = []
+
+# --- PADDLES WITH GLOW EFFECT ---
+def create_paddle(x, color, glow_color):
+    # Glow effect
+    glow = turtle.Turtle()
+    glow.hideturtle()
+    glow.penup()
+    glow.goto(x, 0)
+    glow.shape("square")
+    glow.color(glow_color)
+    glow.shapesize(stretch_wid=5.5, stretch_len=1.5)
+    
+    # Main paddle
+    paddle = turtle.Turtle()
+    paddle.speed(0)
+    paddle.shape("square")
+    paddle.color(color)
+    paddle.shapesize(stretch_wid=5, stretch_len=1)
+    paddle.penup()
+    paddle.goto(x, 0)
+    
+    return paddle, glow
+
+madrab1, glow1 = create_paddle(-350, "#00ffea", "#00ffff")
+madrab2, glow2 = create_paddle(350, "#ff00e6", "#ff00ff")
+
+# --- BALL WITH TRAIL EFFECT ---
+ball = turtle.Turtle()
+ball.speed(0)
+ball.shape("circle")
+ball.color("#ffffff")
+ball.penup()
+ball.goto(0, 0)
+ball.dx = random.choice([-1, 1]) * 1.3
+ball.dy = random.choice([-1, 1]) * 1.3
+ball.trail = []
+
+# --- SCORE DISPLAY ---
+score1 = 0
+score2 = 0
+
+# Main score
+score = turtle.Turtle()
+score.speed(0)
+score.color("#ffffff")
+score.penup()
+score.hideturtle()
+score.goto(0, 260)
+
+# Score shadow
+score_shadow = turtle.Turtle()
+score_shadow.speed(0)
+score_shadow.color("#00ffff")
+score_shadow.penup()
+score_shadow.hideturtle()
+score_shadow.goto(2, 258)
+
+def update_score():
+    score_shadow.clear()
+    score.clear()
+    score_text = f"Player 1: {score1}  Player 2: {score2}"
+    score_shadow.write(score_text, align="center", font=("Arial", 24, "bold"))
+    score.write(score_text, align="center", font=("Arial", 24, "bold"))
+
+update_score()
+
+# --- PADDLE GLOW ANIMATION ---
+def paddle_glow(paddle, glow):
+    glow.goto(paddle.xcor(), paddle.ycor())
+    for i in range(5, 0, -1):
+        glow.shapesize(stretch_wid=5 + i/3, stretch_len=1 + i/6)
+        wind.update()
+        time.sleep(0.02)
+    glow.shapesize(stretch_wid=5.5, stretch_len=1.5)
+
+# --- PADDLE CONTROLS ---
+def madrab1_up():
+    if game_state == "running":
+        y = madrab1.ycor()
+        if y < 250:
+            madrab1.sety(y + 30)
+            glow1.goto(madrab1.xcor(), madrab1.ycor())
+
+def madrab1_down():
+    if game_state == "running":
+        y = madrab1.ycor()
+        if y > -250:
+            madrab1.sety(y - 30)
+            glow1.goto(madrab1.xcor(), madrab1.ycor())
+
+def madrab2_up():
+    if game_state == "running":
+        y = madrab2.ycor()
+        if y < 250:
+            madrab2.sety(y + 30)
+            glow2.goto(madrab2.xcor(), madrab2.ycor())
+
+def madrab2_down():
+    if game_state == "running":
+        y = madrab2.ycor()
+        if y > -250:
+            madrab2.sety(y - 30)
+            glow2.goto(madrab2.xcor(), madrab2.ycor())
+
+# --- COMPUTER AI ---
+def computer_move():
+    target_y = ball.ycor()
+    
+    if level == 1:  # Easy
+        if random.random() < 0.7:  # Only move 70% of the time
+            if target_y > madrab2.ycor() + 15:
+                madrab2.sety(min(madrab2.ycor() + 15, 250))
+            elif target_y < madrab2.ycor() - 15:
+                madrab2.sety(max(madrab2.ycor() - 15, -250))
+                
+    elif level == 2:  # Medium
+        if abs(target_y - madrab2.ycor()) > 20:
+            if target_y > madrab2.ycor():
+                madrab2.sety(min(madrab2.ycor() + 20, 250))
+            else:
+                madrab2.sety(max(madrab2.ycor() - 20, -250))
+                
+    elif level == 3:  # Hard
+        # Predict ball trajectory
+        future_y = ball.ycor() + ball.dy * 15
+        if abs(future_y - madrab2.ycor()) > 10:
+            if future_y > madrab2.ycor():
+                madrab2.sety(min(madrab2.ycor() + 25, 250))
+            else:
+                madrab2.sety(max(madrab2.ycor() - 25, -250))
+    
+    glow2.goto(madrab2.xcor(), madrab2.ycor())
+
+# --- RESET BALL ---
+def reset_ball():
+    ball.goto(0, 0)
+    ball.dx = random.choice([-1, 1]) * 2.0
+    ball.dy = random.choice([-1, 1]) * 2.0
+    
+    # Clean up old trails
+    for trail, _ in ball.trail:
+        trail.hideturtle()
+        trail.clear()
+    ball.trail = []
+    
+    # Create explosion effect
+    for _ in range(30):
+        particles.append(Particle(0, 0, random.choice(["#ff00e6", "#00ffea", "#ffffff"])))
+    
+    time.sleep(0.5)
+
+# --- START SCREEN ---
+game_state = "waiting"
+
+start_msg = turtle.Turtle()
+start_msg.hideturtle()
+start_msg.color("#ffffff")
+start_msg.penup()
+start_msg.goto(0, 0)
+start_msg.write("PRESS SPACE OR RETURN TO START", align="center", font=("Arial", 28, "bold"))
+
+# Create win message turtle
+win_msg = turtle.Turtle()
+win_msg.hideturtle()
+win_msg.color("#ffffff")
+win_msg.penup()
+win_msg.goto(0, 0)
+
+def start_game():
+    global game_state
+    if game_state == "waiting" or game_state == "game_over":
+        game_state = "running"
+        start_msg.clear()
+        win_msg.clear()
+
+def quit_game():
+    wind.bye()
+
+# SET UP KEY BINDINGS PROPERLY
+wind.listen()
+wind.onkeypress(madrab1_up, "w")
+wind.onkeypress(madrab1_down, "s")
+
+# Changed Player 2 down key from Down Arrow to 'm'
+if mode == "1":
+    wind.onkeypress(madrab2_up, "Up")
+    wind.onkeypress(madrab2_down, "m")  # Changed to 'm' key
+
+# Bind start to space and return
+wind.onkeypress(start_game, "Return")
+wind.onkeypress(start_game, "space")
+wind.onkeypress(quit_game, "q")
+
+# --- GAME LOOP ---
+last_time = time.time()
+while True:
+    current_time = time.time()
+    delta_time = current_time - last_time
+    last_time = current_time
+    
+    wind.update()
+    
+    # Update particles
+    new_particles = []
+    for p in particles:
+        if p.update():
+            new_particles.append(p)
+        else:
+            p.turtle.clear()
+    particles = new_particles
+    
+    if game_state == "running":
+        # Ball trail effect
+        if len(ball.trail) < 5:
+            trail = turtle.Turtle()
+            trail.hideturtle()
+            trail.shape("circle")
+            trail.color("#fff700")
+            trail.penup()
+            trail.goto(ball.xcor(), ball.ycor())
+            trail.shapesize(0.5)
+            trail.showturtle()
+            ball.trail.append((trail, 10))
+        
+        # Update ball trail
+        updated_trails = []
+        for trail, life in ball.trail:
+            new_life = life - 0.5
+            if new_life > 0:
+                # Ensure size never reaches zero
+                new_size = max(0.05, 0.5 * (new_life/10))
+                trail.shapesize(new_size)
+                updated_trails.append((trail, new_life))
+            else:
+                trail.hideturtle()
+                trail.clear()
+        ball.trail = updated_trails
+        
+        # Move ball
+        ball.setx(ball.xcor() + ball.dx)
+        ball.sety(ball.ycor() + ball.dy)
+        
+        # Wall collision
+        if ball.ycor() > 290:
+            ball.sety(290)
+            ball.dy *= -1
+            # Create particles on wall hit
+            for _ in range(10):
+                particles.append(Particle(ball.xcor(), ball.ycor(), "#fff700"))
+        elif ball.ycor() < -290:
+            ball.sety(-290)
+            ball.dy *= -1
+            for _ in range(10):
+                particles.append(Particle(ball.xcor(), ball.ycor(), "#fff700"))
+        
+        # Paddle collisions
+        if (-350 < ball.xcor() < -340) and (madrab1.ycor() - 50 < ball.ycor() < madrab1.ycor() + 50):
+            ball.setx(-340)
+            ball.dx = abs(ball.dx) * 1.05  # Ensure positive direction
+            ball.dy += random.uniform(-0.2, 0.2)
+            ball.color("#00ffea")
+            paddle_glow(madrab1, glow1)
+            # Create particles on hit
+            for _ in range(15):
+                particles.append(Particle(ball.xcor(), ball.ycor(), "#00ffea"))
+        
+        if (340 < ball.xcor() < 350) and (madrab2.ycor() - 50 < ball.ycor() < madrab2.ycor() + 50):
+            ball.setx(340)
+            ball.dx = -abs(ball.dx) * 1.05  # Ensure negative direction
+            ball.dy += random.uniform(-0.2, 0.2)
+            ball.color("#ff00e6")
+            paddle_glow(madrab2, glow2)
+            # Create particles on hit
+            for _ in range(15):
+                particles.append(Particle(ball.xcor(), ball.ycor(), "#ff00e6"))
+        
+        # Score
+        if ball.xcor() < -390:
+            score2 += 1
+            update_score()
+            reset_ball()
+        
+        if ball.xcor() > 390:
+            score1 += 1
+            update_score()
+            reset_ball()
+        
+        # Computer move
+        if mode == "2":
+            computer_move()
+        
+        # Win condition - stops game and shows winner
+        if score1 >= 11 or score2 >= 11:
+            winner = "PLAYER 1" if score1 >= 11 else "PLAYER 2"
+            win_msg.clear()
+            win_msg.write(f"{winner} WINS!", align="center", font=("Arial", 40, "bold"))
+            game_state = "game_over"
+    
+    time.sleep(0.005)
+            </code></pre>
+        </div>
+        
+        <div class="features">
+            <div class="feature">
+                <i class="fas fa-desktop"></i>
+                <span>Responsive Design</span>
+            </div>
+            <div class="feature">
+                <i class="fas fa-clipboard-check"></i>
+                <span>Copy to Clipboard</span>
+            </div>
+            <div class="feature">
+                <i class="fas fa-code"></i>
+                <span>Syntax Highlighted</span>
+            </div>
+            <div class="feature">
+                <i class="fas fa-scroll"></i>
+                <span>Scrollable Code</span>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.getElementById('copyButton').addEventListener('click', function() {
+            const codeElement = document.querySelector('.code-block code');
+            const textArea = document.createElement('textarea');
+            textArea.value = codeElement.textContent;
+            document.body.appendChild(textArea);
+            textArea.select();
+            document.execCommand('copy');
+            document.body.removeChild(textArea);
+            
+            // Visual feedback
+            const button = this;
+            button.classList.add('copied');
+            button.innerHTML = '<i class="fas fa-check"></i> ';
+            
+            setTimeout(() => {
+                button.classList.remove('copied');
+                button.innerHTML = '<i class="fas fa-copy"></i> Copy Code';
+            }, 2000);
+        });
+    </script>
+</body>
+</html>

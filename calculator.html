@@ -1,0 +1,381 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calculator Python Code</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #1a2a6c, #b21f1f, #fdbb2d);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+        
+        .container {
+            background: rgba(34, 34, 59, 0.95);
+            border-radius: 18px;
+            box-shadow: 0 12px 32px rgba(0, 0, 0, 0.25);
+            padding: 35px;
+            max-width: 800px;
+            width: 95%;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .container::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 5px;
+            background: linear-gradient(90deg, #00ffcc, #0077ff, #ff00cc);
+        }
+        
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 25px;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+        
+        h1 {
+            color: #00ffcc;
+            font-weight: 700;
+            letter-spacing: 1px;
+            font-size: 2.2rem;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+        }
+        
+        .controls {
+            display: flex;
+            gap: 15px;
+        }
+        
+        .copy-btn {
+            background: linear-gradient(135deg, #00ccff, #0077ff);
+            color: white;
+            border: none;
+            border-radius: 50px;
+            padding: 12px 25px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 12px rgba(0, 119, 255, 0.3);
+        }
+        
+        .copy-btn:hover {
+            background: linear-gradient(135deg, #00e6ff, #0066ff);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 15px rgba(0, 119, 255, 0.4);
+        }
+        
+        .copy-btn:active {
+            transform: translateY(1px);
+        }
+        
+        .copy-btn.copied {
+            background: linear-gradient(135deg, #00ff88, #00cc66);
+        }
+        
+        .copy-btn.copied::after {
+            content: 'Copied!';
+        }
+        
+        .code-container {
+            position: relative;
+        }
+        
+        .code-block {
+            background: #1e1e2e;
+            color: #e0e0e0;
+            border-radius: 12px;
+            padding: 25px;
+            font-size: 0.95rem;
+            overflow-x: auto;
+            box-shadow: inset 0 0 15px rgba(0, 0, 0, 0.5);
+            max-height: 70vh;
+            line-height: 1.5;
+            position: relative;
+        }
+        
+        .code-block code {
+            font-family: 'Fira Code', 'Consolas', 'Menlo', 'Monaco', monospace;
+            display: block;
+            white-space: pre;
+        }
+        
+        .features {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 25px;
+            color: #a0a0c0;
+            font-size: 0.9rem;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+        
+        .feature {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .feature i {
+            color: #00ffcc;
+        }
+        
+        .language-tag {
+            position: absolute;
+            top: 10px;
+            right: 20px;
+            background: rgba(0, 255, 204, 0.15);
+            color: #00ffcc;
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 600;
+        }
+        
+        /* Scrollbar styling */
+        .code-block::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+        
+        .code-block::-webkit-scrollbar-track {
+            background: #2a2a3a;
+            border-radius: 10px;
+        }
+        
+        .code-block::-webkit-scrollbar-thumb {
+            background: #00ccff;
+            border-radius: 10px;
+        }
+        
+        .code-block::-webkit-scrollbar-thumb:hover {
+            background: #00aaff;
+        }
+        
+        @media (max-width: 600px) {
+            .container {
+                padding: 25px 15px;
+            }
+            
+            h1 {
+                font-size: 1.8rem;
+            }
+            
+            .copy-btn {
+                padding: 10px 20px;
+                font-size: 0.9rem;
+            }
+            
+            .code-block {
+                padding: 20px 15px;
+                font-size: 0.85rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1><i class="fas fa-code"></i>Calculator Python Code</h1>
+            <div class="controls">
+                <button id="copyButton" class="copy-btn">
+                    <i class="fas fa-copy"></i> Copy Code
+                </button>
+            </div>
+        </div>
+        
+        <div class="code-container">
+            <span class="language-tag">Python</span>
+            <pre class="code-block"><code>
+import tkinter as tk
+
+# Global expression
+expression = ""
+
+# Update input
+def update_display(value):
+    global expression
+    # Convert symbols to valid Python ops
+    if value == "×":
+        expression += "*"
+    elif value == "÷":
+        expression += "/"
+    else:
+        expression += str(value)
+    input_text.set(expression_display())
+
+# Clear
+def clear_display():
+    global expression
+    expression = ""
+    input_text.set("")
+
+# Backspace
+def backspace():
+    global expression
+    expression = expression[:-1]
+    input_text.set(expression_display())
+
+# Show the expression with user-friendly symbols
+def expression_display():
+    return expression.replace("*", "×").replace("/", "÷")
+
+# Evaluate
+def calculate():
+    global expression
+    try:
+        result = str(eval(expression))
+        input_text.set(result)
+        expression = result
+    except:
+        input_text.set("Error")
+        expression = ""
+
+# Handle keyboard
+def key_event(event):
+    key = event.keysym
+    if key in "0123456789":
+        update_display(key)
+    elif key in ["plus", "KP_Add"]:
+        update_display("+")
+    elif key in ["minus", "KP_Subtract"]:
+        update_display("-")
+    elif key in ["asterisk", "KP_Multiply"]:
+        update_display("×")
+    elif key in ["slash", "KP_Divide"]:
+        update_display("÷")
+    elif key == "Return":
+        calculate()
+    elif key == "BackSpace":
+        backspace()
+    elif key == "Escape":
+        clear_display()
+    elif key == "period" or key == "KP_Decimal":
+        update_display(".")
+
+# Main window
+root = tk.Tk()
+root.title("Modern Calculator")
+root.geometry("320x450")
+root.configure(bg="#1e1e1e")
+root.resizable(False, False)
+root.bind("<Key>", key_event)
+
+# Display
+input_text = tk.StringVar()
+entry = tk.Entry(
+    root, textvariable=input_text,
+    font=("Segoe UI", 22), bg="#2e2e2e", fg="#00ffcc",
+    bd=0, relief=tk.FLAT, justify="right", insertbackground="#00ffcc"
+)
+entry.pack(expand=True, fill="both", padx=20, pady=(20, 10))
+
+# Button frame
+button_frame = tk.Frame(root, bg="#1e1e1e")
+button_frame.pack(expand=True, fill="both", padx=10, pady=10)
+
+# Button layout with ÷ and ×
+buttons = [
+    ["C", "←", "÷", "×"],
+    ["7", "8", "9", "-"],
+    ["4", "5", "6", "+"],
+    ["1", "2", "3", "="],
+    ["0", ".", "", ""]
+]
+
+# Create styled button
+def create_button(text, command):
+    if text == "":
+        return tk.Label(button_frame, bg="#1e1e1e")
+    return tk.Button(
+        button_frame, text=text, command=command,
+        font=("Segoe UI", 16), fg="#ffffff", bg="#333333",
+        activebackground="#00ffcc", activeforeground="#1e1e1e",
+        bd=0, relief=tk.FLAT, height=2, width=5
+    )
+
+# Place buttons
+for r, row in enumerate(buttons):
+    for c, char in enumerate(row):
+        if char == "C":
+            btn = create_button("C", clear_display)
+        elif char == "←":
+            btn = create_button("←", backspace)
+        elif char == "=":
+            btn = create_button("=", calculate)
+        elif char:
+            btn = create_button(char, lambda x=char: update_display(x))
+        else:
+            btn = create_button("", None)
+        btn.grid(row=r, column=c, padx=5, pady=5)
+
+# Run app
+root.mainloop()
+            </code></pre>
+        </div>
+        
+        <div class="features">
+            <div class="feature">
+                <i class="fas fa-desktop"></i>
+                <span>Responsive Design</span>
+            </div>
+            <div class="feature">
+                <i class="fas fa-clipboard-check"></i>
+                <span>Copy to Clipboard</span>
+            </div>
+            <div class="feature">
+                <i class="fas fa-code"></i>
+                <span>Syntax Highlighted</span>
+            </div>
+            <div class="feature">
+                <i class="fas fa-scroll"></i>
+                <span>Scrollable Code</span>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.getElementById('copyButton').addEventListener('click', function() {
+            const codeElement = document.querySelector('.code-block code');
+            const textArea = document.createElement('textarea');
+            textArea.value = codeElement.textContent;
+            document.body.appendChild(textArea);
+            textArea.select();
+            document.execCommand('copy');
+            document.body.removeChild(textArea);
+            
+            // Visual feedback
+            const button = this;
+            button.classList.add('copied');
+            button.innerHTML = '<i class="fas fa-check"></i> ';
+            
+            setTimeout(() => {
+                button.classList.remove('copied');
+                button.innerHTML = '<i class="fas fa-copy"></i> Copy Code';
+            }, 2000);
+        });
+    </script>
+</body>
+</html>

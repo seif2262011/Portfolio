@@ -1,0 +1,1039 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tic-Tac-Toe Python Code</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #1a2a6c, #b21f1f, #fdbb2d);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+        
+        .container {
+            background: rgba(34, 34, 59, 0.95);
+            border-radius: 18px;
+            box-shadow: 0 12px 32px rgba(0, 0, 0, 0.25);
+            padding: 35px;
+            max-width: 800px;
+            width: 95%;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .container::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 5px;
+            background: linear-gradient(90deg, #00ffcc, #0077ff, #ff00cc);
+        }
+        
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 25px;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+        
+        h1 {
+            color: #00ffcc;
+            font-weight: 700;
+            letter-spacing: 1px;
+            font-size: 2.2rem;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+        }
+        
+        .controls {
+            display: flex;
+            gap: 15px;
+        }
+        
+        .copy-btn {
+            background: linear-gradient(135deg, #00ccff, #0077ff);
+            color: white;
+            border: none;
+            border-radius: 50px;
+            padding: 12px 25px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 12px rgba(0, 119, 255, 0.3);
+        }
+        
+        .copy-btn:hover {
+            background: linear-gradient(135deg, #00e6ff, #0066ff);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 15px rgba(0, 119, 255, 0.4);
+        }
+        
+        .copy-btn:active {
+            transform: translateY(1px);
+        }
+        
+        .copy-btn.copied {
+            background: linear-gradient(135deg, #00ff88, #00cc66);
+        }
+        
+        .copy-btn.copied::after {
+            content: 'Copied!';
+        }
+        
+        .code-container {
+            position: relative;
+        }
+        
+        .code-block {
+            background: #1e1e2e;
+            color: #e0e0e0;
+            border-radius: 12px;
+            padding: 25px;
+            font-size: 0.95rem;
+            overflow-x: auto;
+            box-shadow: inset 0 0 15px rgba(0, 0, 0, 0.5);
+            max-height: 70vh;
+            line-height: 1.5;
+            position: relative;
+        }
+        
+        .code-block code {
+            font-family: 'Fira Code', 'Consolas', 'Menlo', 'Monaco', monospace;
+            display: block;
+            white-space: pre;
+        }
+        
+        .features {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 25px;
+            color: #a0a0c0;
+            font-size: 0.9rem;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+        
+        .feature {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .feature i {
+            color: #00ffcc;
+        }
+        
+        .language-tag {
+            position: absolute;
+            top: 10px;
+            right: 20px;
+            background: rgba(0, 255, 204, 0.15);
+            color: #00ffcc;
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 600;
+        }
+        
+        /* Scrollbar styling */
+        .code-block::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+        
+        .code-block::-webkit-scrollbar-track {
+            background: #2a2a3a;
+            border-radius: 10px;
+        }
+        
+        .code-block::-webkit-scrollbar-thumb {
+            background: #00ccff;
+            border-radius: 10px;
+        }
+        
+        .code-block::-webkit-scrollbar-thumb:hover {
+            background: #00aaff;
+        }
+        
+        @media (max-width: 600px) {
+            .container {
+                padding: 25px 15px;
+            }
+            
+            h1 {
+                font-size: 1.8rem;
+            }
+            
+            .copy-btn {
+                padding: 10px 20px;
+                font-size: 0.9rem;
+            }
+            
+            .code-block {
+                padding: 20px 15px;
+                font-size: 0.85rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1><i class="fas fa-code"></i> Tic-Tac-Toe Python Code</h1>
+            <div class="controls">
+                <button id="copyButton" class="copy-btn">
+                    <i class="fas fa-copy"></i> Copy Code
+                </button>
+            </div>
+        </div>
+        
+        <div class="code-container">
+            <span class="language-tag">Python</span>
+            <pre class="code-block"><code>
+import pygame
+import sys
+import random
+import math
+from enum import Enum
+
+# Initialize pygame
+pygame.init()
+pygame.font.init()
+
+# Screen dimensions
+WIDTH, HEIGHT = 800, 600
+screen = pygame.display.set_mode((WIDTH, HEIGHT))
+pygame.display.set_caption("Modern Tic-Tac-Toe")
+
+# Colors
+BACKGROUND = (18, 18, 24)
+GRID_COLOR = (40, 44, 60)
+GRID_HIGHLIGHT = (70, 80, 120)
+PLAYER_X_COLOR = (86, 156, 214)  # Blue
+PLAYER_O_COLOR = (220, 120, 100)  # Coral
+TEXT_COLOR = (220, 220, 220)
+BUTTON_COLOR = (60, 64, 90)
+BUTTON_HOVER = (80, 90, 140)
+BUTTON_TEXT = (220, 220, 220)
+PANEL_COLOR = (30, 34, 48, 200)
+
+# Game settings
+BOARD_SIZES = [3, 4, 5]  # Supported board sizes
+DEFAULT_BOARD_SIZE = 3
+CELL_SIZE = 100
+BOARD_PADDING = 50
+ANIMATION_SPEED = 0.15
+
+# Fonts
+TITLE_FONT = pygame.font.SysFont("Arial", 48, bold=True)
+SCORE_FONT = pygame.font.SysFont("Arial", 28)
+BUTTON_FONT = pygame.font.SysFont("Arial", 24)
+INFO_FONT = pygame.font.SysFont("Arial", 20)
+SMALL_FONT = pygame.font.SysFont("Arial", 18)
+
+class PlayerType(Enum):
+    HUMAN = 1
+    COMPUTER = 2
+
+class Difficulty(Enum):
+    EASY = 1
+    MEDIUM = 2
+    HARD = 3
+
+class Player:
+    def __init__(self, symbol, player_type=PlayerType.HUMAN, difficulty=Difficulty.EASY):
+        self.symbol = symbol
+        self.player_type = player_type
+        self.difficulty = difficulty
+        self.score = 0
+        self.color = PLAYER_X_COLOR if symbol == 'X' else PLAYER_O_COLOR
+        
+    def __str__(self):
+        return f"Player {self.symbol}"
+    
+    def is_computer(self):
+        return self.player_type == PlayerType.COMPUTER
+
+class Board:
+    def __init__(self, size=3):
+        self.size = size
+        self.cells = [['' for _ in range(size)] for _ in range(size)]
+        self.animations = []  # Store animation data: (row, col, symbol, progress)
+        self.winning_line = None
+        
+    def reset(self):
+        self.cells = [['' for _ in range(self.size)] for _ in range(self.size)]
+        self.animations = []
+        self.winning_line = None
+        
+    def is_valid_move(self, row, col):
+        return 0 <= row < self.size and 0 <= col < self.size and self.cells[row][col] == ''
+    
+    def make_move(self, row, col, symbol, animate=True):
+        if self.is_valid_move(row, col):
+            self.cells[row][col] = symbol
+            if animate:
+                self.animations.append((row, col, symbol, 0))
+            return True
+        return False
+    
+    def is_full(self):
+        for row in self.cells:
+            for cell in row:
+                if cell == '':
+                    return False
+        return True
+    
+    def check_win(self, symbol):
+        # Check rows
+        for row in range(self.size):
+            if all(self.cells[row][col] == symbol for col in range(self.size)):
+                self.winning_line = ("row", row)
+                return True
+        
+        # Check columns
+        for col in range(self.size):
+            if all(self.cells[row][col] == symbol for row in range(self.size)):
+                self.winning_line = ("col", col)
+                return True
+        
+        # Check diagonals
+        if all(self.cells[i][i] == symbol for i in range(self.size)):
+            self.winning_line = ("diag", 0)
+            return True
+        if all(self.cells[i][self.size-1-i] == symbol for i in range(self.size)):
+            self.winning_line = ("diag", 1)
+            return True
+        
+        return False
+    
+    def get_available_moves(self):
+        moves = []
+        for row in range(self.size):
+            for col in range(self.size):
+                if self.cells[row][col] == '':
+                    moves.append((row, col))
+        return moves
+
+class Button:
+    def __init__(self, x, y, width, height, text, action=None, font=BUTTON_FONT):
+        self.rect = pygame.Rect(x, y, width, height)
+        self.text = text
+        self.action = action
+        self.hovered = False
+        self.font = font
+        
+    def draw(self, surface):
+        color = BUTTON_HOVER if self.hovered else BUTTON_COLOR
+        pygame.draw.rect(surface, color, self.rect, border_radius=8)
+        pygame.draw.rect(surface, GRID_HIGHLIGHT, self.rect, 2, border_radius=8)
+        
+        text_surf = self.font.render(self.text, True, BUTTON_TEXT)
+        text_rect = text_surf.get_rect(center=self.rect.center)
+        surface.blit(text_surf, text_rect)
+        
+    def check_hover(self, pos):
+        self.hovered = self.rect.collidepoint(pos)
+        
+    def handle_event(self, event):
+        if event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
+            if self.hovered and self.action:
+                return self.action()
+        return None
+
+class InputBox:
+    def __init__(self, x, y, width, height, text='', font=BUTTON_FONT):
+        self.rect = pygame.Rect(x, y, width, height)
+        self.color = BUTTON_COLOR
+        self.text = text
+        self.font = font
+        self.active = False
+        self.max_length = 2  # For board size input
+        
+    def handle_event(self, event):
+        if event.type == pygame.MOUSEBUTTONDOWN:
+            # If the user clicked on the input_box rect
+            if self.rect.collidepoint(event.pos):
+                # Toggle the active variable
+                self.active = True
+            else:
+                self.active = False
+            # Change the current color of the input box
+            self.color = BUTTON_HOVER if self.active else BUTTON_COLOR
+        if event.type == pygame.KEYDOWN:
+            if self.active:
+                if event.key == pygame.K_RETURN:
+                    return self.text
+                elif event.key == pygame.K_BACKSPACE:
+                    self.text = self.text[:-1]
+                elif event.key == pygame.K_ESCAPE:
+                    self.active = False
+                    self.color = BUTTON_COLOR
+                else:
+                    # Only allow numbers
+                    if event.unicode.isdigit() and len(self.text) < self.max_length:
+                        self.text += event.unicode
+        return None
+        
+    def draw(self, surface):
+        # Draw the input box
+        pygame.draw.rect(surface, self.color, self.rect, border_radius=5)
+        pygame.draw.rect(surface, GRID_HIGHLIGHT, self.rect, 2, border_radius=5)
+        
+        # Render the text
+        text_surface = self.font.render(self.text, True, BUTTON_TEXT)
+        # Position text in the center
+        text_rect = text_surface.get_rect(center=self.rect.center)
+        surface.blit(text_surface, text_rect)
+
+class Game:
+    def __init__(self):
+        self.board = Board(DEFAULT_BOARD_SIZE)
+        self.players = []
+        self.current_player_index = 0
+        self.game_mode = None  # 'pvp', 'pvc'
+        self.game_over = False
+        self.winner = None
+        self.computer_thinking = False
+        self.buttons = []
+        self.input_box = None
+        self.custom_size = DEFAULT_BOARD_SIZE
+        self.setup_main_menu()
+        self.current_screen = "main_menu"  # Track current screen
+        
+    def setup_main_menu(self):
+        self.current_screen = "main_menu"
+        self.buttons = [
+            Button(WIDTH//2 - 100, HEIGHT//2 - 50, 200, 50, "Player vs Player", lambda: self.setup_board_size_menu('pvp')),
+            Button(WIDTH//2 - 100, HEIGHT//2 + 20, 200, 50, "Player vs Computer", lambda: self.setup_board_size_menu('pvc')),
+            Button(WIDTH//2 - 100, HEIGHT//2 + 90, 200, 50, "Quit", lambda: pygame.event.post(pygame.event.Event(pygame.QUIT)))
+        ]
+        
+    def setup_board_size_menu(self, mode):
+        self.current_screen = "board_size"
+        self.game_mode = mode
+        self.buttons = []
+        
+        # Title
+        title = "Select Board Size"
+        
+        # Standard size buttons
+        for i, size in enumerate(BOARD_SIZES):
+            self.buttons.append(
+                Button(WIDTH//2 - 100, HEIGHT//3 + i * 60, 200, 50, 
+                      f"{size}x{size}", 
+                      lambda s=size: self.start_game(s))
+            )
+        
+        # Custom size button
+        self.buttons.append(
+            Button(WIDTH//2 - 100, HEIGHT//3 + len(BOARD_SIZES) * 60, 200, 50, 
+                   "Custom Size", 
+                   self.show_custom_size_input)
+        )
+        
+        # Back button
+        self.buttons.append(
+            Button(WIDTH//2 - 100, HEIGHT - 80, 200, 50, 
+                   "Back", 
+                   self.setup_main_menu)
+        )
+    
+    def show_custom_size_input(self):
+        self.current_screen = "custom_size"
+        self.buttons = []
+        
+        # Custom size input
+        self.input_box = InputBox(WIDTH//2 - 50, HEIGHT//2 - 25, 100, 50, str(self.custom_size))
+        
+        # Confirm button
+        self.buttons.append(
+            Button(WIDTH//2 - 100, HEIGHT//2 + 40, 200, 50, 
+                   "Confirm", 
+                   self.confirm_custom_size)
+        )
+        
+        # Back button
+        self.buttons.append(
+            Button(WIDTH//2 - 100, HEIGHT - 80, 200, 50, 
+                   "Back", 
+                   lambda: self.setup_board_size_menu(self.game_mode))
+        )
+    
+    def confirm_custom_size(self):
+        if self.input_box.text.isdigit():
+            size = int(self.input_box.text)
+            if 3 <= size <= 8:
+                self.start_game(size)
+            else:
+                # Show error message?
+                pass
+        return True
+    
+    def start_game(self, board_size):
+        # Validate board size
+        if board_size < 3:
+            board_size = 3
+        elif board_size > 8:  # Set a reasonable limit
+            board_size = 8
+            
+        self.current_screen = "game"
+        self.board = Board(board_size)
+        self.game_over = False
+        self.winner = None
+        self.current_player_index = 0
+        self.input_box = None
+        
+        # Create players
+        if self.game_mode == 'pvp':
+            self.players = [
+                Player('X'),
+                Player('O')
+            ]
+        else:  # pvc
+            self.players = [
+                Player('X'),
+                Player('O', PlayerType.COMPUTER, Difficulty.MEDIUM)
+            ]
+        
+        # Create in-game buttons
+        self.buttons = [
+            Button(WIDTH - 150, HEIGHT - 60, 130, 40, "Main Menu", self.return_to_menu),
+            Button(WIDTH - 150, HEIGHT - 120, 130, 40, "Restart", self.restart_game)
+        ]
+    
+    def return_to_menu(self):
+        self.game_mode = None
+        self.setup_main_menu()
+        return True
+        
+    def restart_game(self):
+        self.board.reset()
+        self.game_over = False
+        self.winner = None
+        self.current_player_index = 0
+        return True
+        
+    def get_current_player(self):
+        return self.players[self.current_player_index]
+    
+    def next_player(self):
+        self.current_player_index = (self.current_player_index + 1) % len(self.players)
+    
+    def handle_click(self, pos):
+        if self.game_over or self.get_current_player().is_computer():
+            return
+            
+        # Calculate board position
+        board_x = (WIDTH - (self.board.size * CELL_SIZE)) // 2
+        board_y = (HEIGHT - (self.board.size * CELL_SIZE)) // 2
+        
+        # Check if click is on board
+        if (board_x <= pos[0] <= board_x + self.board.size * CELL_SIZE and
+            board_y <= pos[1] <= board_y + self.board.size * CELL_SIZE):
+            
+            # Calculate grid position
+            col = (pos[0] - board_x) // CELL_SIZE
+            row = (pos[1] - board_y) // CELL_SIZE
+            
+            # Make move
+            if self.board.make_move(row, col, self.get_current_player().symbol):
+                # Check win/draw
+                if self.board.check_win(self.get_current_player().symbol):
+                    self.game_over = True
+                    self.winner = self.get_current_player()
+                    self.winner.score += 1
+                elif self.board.is_full():
+                    self.game_over = True
+                else:
+                    self.next_player()
+                    
+                    # If next player is computer, set thinking flag
+                    if self.get_current_player().is_computer():
+                        self.computer_thinking = True
+    
+    def computer_move(self):
+        if not self.computer_thinking or self.game_over:
+            return
+            
+        # Artificial delay to simulate thinking
+        pygame.time.delay(500)
+        
+        player = self.get_current_player()
+        moves = self.board.get_available_moves()
+        
+        if not moves:
+            return
+            
+        # Easy: random move
+        if player.difficulty == Difficulty.EASY:
+            row, col = random.choice(moves)
+        
+        # Medium: try to win or block
+        elif player.difficulty == Difficulty.MEDIUM:
+            # Try to win
+            win_found = False
+            for move in moves:
+                row, col = move
+                self.board.cells[row][col] = player.symbol
+                if self.board.check_win(player.symbol):
+                    win_found = True
+                    self.board.cells[row][col] = ''
+                    break
+                self.board.cells[row][col] = ''
+            
+            if not win_found:
+                # Block opponent
+                opponent_symbol = 'O' if player.symbol == 'X' else 'X'
+                block_found = False
+                for move in moves:
+                    row, col = move
+                    self.board.cells[row][col] = opponent_symbol
+                    if self.board.check_win(opponent_symbol):
+                        block_found = True
+                        self.board.cells[row][col] = ''
+                        break
+                    self.board.cells[row][col] = ''
+                
+                if not block_found:
+                    # Random move
+                    row, col = random.choice(moves)
+        
+        # Hard: minimax for 3x3
+        elif player.difficulty == Difficulty.HARD and self.board.size == 3:
+            row, col = self.minimax_move(player.symbol)
+        else:
+            row, col = random.choice(moves)
+        
+        # Make the move
+        self.board.make_move(row, col, player.symbol)
+        
+        # Check win/draw
+        if self.board.check_win(player.symbol):
+            self.game_over = True
+            self.winner = player
+            self.winner.score += 1
+        elif self.board.is_full():
+            self.game_over = True
+        else:
+            self.next_player()
+        
+        self.computer_thinking = False
+    
+    def minimax_move(self, symbol):
+        best_score = -float('inf')
+        best_move = None
+        
+        for row, col in self.board.get_available_moves():
+            self.board.cells[row][col] = symbol
+            score = self.minimax(self.board, False, symbol)
+            self.board.cells[row][col] = ''
+            
+            if score > best_score:
+                best_score = score
+                best_move = (row, col)
+        
+        return best_move
+    
+    def minimax(self, board, is_maximizing, symbol):
+        opponent = 'O' if symbol == 'X' else 'X'
+        
+        if board.check_win(symbol):
+            return 1
+        elif board.check_win(opponent):
+            return -1
+        elif board.is_full():
+            return 0
+        
+        if is_maximizing:
+            best_score = -float('inf')
+            for row, col in board.get_available_moves():
+                board.cells[row][col] = symbol
+                score = self.minimax(board, False, symbol)
+                board.cells[row][col] = ''
+                best_score = max(score, best_score)
+            return best_score
+        else:
+            best_score = float('inf')
+            for row, col in board.get_available_moves():
+                board.cells[row][col] = opponent
+                score = self.minimax(board, True, symbol)
+                board.cells[row][col] = ''
+                best_score = min(score, best_score)
+            return best_score
+    
+    def update(self):
+        # Update animations
+        for i, (row, col, symbol, progress) in enumerate(self.board.animations):
+            progress = min(1.0, progress + ANIMATION_SPEED)
+            self.board.animations[i] = (row, col, symbol, progress)
+        
+        # Computer move
+        if self.computer_thinking:
+            self.computer_move()
+    
+    def draw(self, surface):
+        # Draw background
+        surface.fill(BACKGROUND)
+        
+        if self.current_screen == "main_menu":
+            self.draw_main_menu(surface)
+        elif self.current_screen == "board_size":
+            self.draw_board_size_menu(surface)
+        elif self.current_screen == "custom_size":
+            self.draw_custom_size_menu(surface)
+        elif self.current_screen == "game":
+            self.draw_game(surface)
+    
+    def draw_main_menu(self, surface):
+        # Draw title
+        title = TITLE_FONT.render("TIC-TAC-TOE", True, TEXT_COLOR)
+        surface.blit(title, (WIDTH//2 - title.get_width()//2, HEIGHT//4))
+        
+        # Draw subtitle
+        subtitle = SCORE_FONT.render("Modern Edition", True, PLAYER_X_COLOR)
+        surface.blit(subtitle, (WIDTH//2 - subtitle.get_width()//2, HEIGHT//4 + 60))
+        
+        # Draw buttons
+        for button in self.buttons:
+            button.draw(surface)
+        
+        # Draw instructions
+        instructions = [
+            "• Player vs Player: Two players on one device",
+            "• Player vs Computer: Challenge AI at three difficulty levels",
+            "• Use mouse or keyboard to play"
+        ]
+        
+        for i, text in enumerate(instructions):
+            text_surf = INFO_FONT.render(text, True, (180, 180, 200))
+            surface.blit(text_surf, (WIDTH//2 - text_surf.get_width()//2, HEIGHT - 150 + i * 30))
+    
+    def draw_board_size_menu(self, surface):
+        # Draw title
+        title = TITLE_FONT.render("SELECT BOARD SIZE", True, TEXT_COLOR)
+        surface.blit(title, (WIDTH//2 - title.get_width()//2, HEIGHT//6))
+        
+        # Draw buttons
+        for button in self.buttons:
+            button.draw(surface)
+    
+    def draw_custom_size_menu(self, surface):
+        # Draw title
+        title = TITLE_FONT.render("CUSTOM BOARD SIZE", True, TEXT_COLOR)
+        surface.blit(title, (WIDTH//2 - title.get_width()//2, HEIGHT//4))
+        
+        # Draw input label
+        label = SCORE_FONT.render("Enter board size (3-8):", True, TEXT_COLOR)
+        surface.blit(label, (WIDTH//2 - label.get_width()//2, HEIGHT//2 - 80))
+        
+        # Draw input box
+        if self.input_box:
+            self.input_box.draw(surface)
+        
+        # Draw buttons
+        for button in self.buttons:
+            button.draw(surface)
+    
+    def draw_game(self, surface):
+        # Draw scores
+        score_x = SCORE_FONT.render(f"Player X: {self.players[0].score}", True, PLAYER_X_COLOR)
+        score_o = SCORE_FONT.render(f"Player O: {self.players[1].score}", True, PLAYER_O_COLOR)
+        surface.blit(score_x, (20, 20))
+        surface.blit(score_o, (WIDTH - score_o.get_width() - 20, 20))
+        
+        # Draw current player
+        player = self.get_current_player()
+        status_text = f"{player.symbol}'s Turn"
+        if player.is_computer() and self.computer_thinking:
+            status_text = "Computer thinking..."
+        status = SCORE_FONT.render(status_text, True, player.color)
+        surface.blit(status, (WIDTH//2 - status.get_width()//2, 20))
+        
+        # Draw board size info
+        size_info = SMALL_FONT.render(f"Board Size: {self.board.size}x{self.board.size}", True, TEXT_COLOR)
+        surface.blit(size_info, (WIDTH//2 - size_info.get_width()//2, 60))
+        
+        # Draw board
+        board_x = (WIDTH - (self.board.size * CELL_SIZE)) // 2
+        board_y = (HEIGHT - (self.board.size * CELL_SIZE)) // 2
+        
+        # Draw grid
+        for i in range(self.board.size + 1):
+            # Horizontal lines
+            pygame.draw.line(surface, GRID_COLOR, 
+                            (board_x, board_y + i * CELL_SIZE),
+                            (board_x + self.board.size * CELL_SIZE, board_y + i * CELL_SIZE), 4)
+            # Vertical lines
+            pygame.draw.line(surface, GRID_COLOR, 
+                            (board_x + i * CELL_SIZE, board_y),
+                            (board_x + i * CELL_SIZE, board_y + self.board.size * CELL_SIZE), 4)
+        
+        # Draw symbols with animations
+        for row in range(self.board.size):
+            for col in range(self.board.size):
+                cell_x = board_x + col * CELL_SIZE + CELL_SIZE // 2
+                cell_y = board_y + row * CELL_SIZE + CELL_SIZE // 2
+                
+                # Draw hover effect for empty cells
+                mouse_pos = pygame.mouse.get_pos()
+                cell_rect = pygame.Rect(board_x + col * CELL_SIZE, 
+                                       board_y + row * CELL_SIZE, 
+                                       CELL_SIZE, CELL_SIZE)
+                
+                if (not self.game_over and not self.computer_thinking and
+                    not player.is_computer() and cell_rect.collidepoint(mouse_pos) and
+                    self.board.cells[row][col] == ''):
+                    pygame.draw.rect(surface, GRID_HIGHLIGHT, cell_rect, border_radius=5)
+                
+                # Draw symbols
+                symbol = self.board.cells[row][col]
+                if symbol:
+                    # Check if this cell has an animation
+                    anim_progress = 1.0
+                    for anim_row, anim_col, anim_symbol, progress in self.board.animations:
+                        if anim_row == row and anim_col == col:
+                            anim_progress = progress
+                            break
+                    
+                    color = PLAYER_X_COLOR if symbol == 'X' else PLAYER_O_COLOR
+                    if anim_progress < 1.0:
+                        # For animation, we'll create a temporary surface with alpha
+                        temp_surface = pygame.Surface((CELL_SIZE, CELL_SIZE), pygame.SRCALPHA)
+                        alpha = int(255 * anim_progress)
+                        anim_color = (*color, alpha)
+                        
+                        if symbol == 'X':
+                            # Draw animated X
+                            size = int(CELL_SIZE * 0.3 * anim_progress)
+                            pygame.draw.line(temp_surface, anim_color, 
+                                            (CELL_SIZE//2 - size, CELL_SIZE//2 - size),
+                                            (CELL_SIZE//2 + size, CELL_SIZE//2 + size), 8)
+                            pygame.draw.line(temp_surface, anim_color, 
+                                            (CELL_SIZE//2 - size, CELL_SIZE//2 + size),
+                                            (CELL_SIZE//2 + size, CELL_SIZE//2 - size), 8)
+                        else:  # 'O'
+                            # Draw animated O
+                            radius = int(CELL_SIZE * 0.3 * anim_progress)
+                            pygame.draw.circle(temp_surface, anim_color, 
+                                              (CELL_SIZE//2, CELL_SIZE//2), radius, 8)
+                        
+                        surface.blit(temp_surface, (board_x + col * CELL_SIZE, board_y + row * CELL_SIZE))
+                    else:
+                        # Draw static symbol
+                        if symbol == 'X':
+                            size = int(CELL_SIZE * 0.3)
+                            pygame.draw.line(surface, color, 
+                                            (cell_x - size, cell_y - size),
+                                            (cell_x + size, cell_y + size), 8)
+                            pygame.draw.line(surface, color, 
+                                            (cell_x - size, cell_y + size),
+                                            (cell_x + size, cell_y - size), 8)
+                        else:  # 'O'
+                            radius = int(CELL_SIZE * 0.3)
+                            pygame.draw.circle(surface, color, (cell_x, cell_y), radius, 8)
+        
+        # Draw winning line - ONLY if there's a winner
+        if self.board.winning_line and self.winner:
+            line_type, index = self.board.winning_line
+            color = self.winner.color
+            
+            if line_type == "row":
+                y = board_y + index * CELL_SIZE + CELL_SIZE // 2
+                pygame.draw.line(surface, color, 
+                                (board_x, y),
+                                (board_x + self.board.size * CELL_SIZE, y), 8)
+            elif line_type == "col":
+                x = board_x + index * CELL_SIZE + CELL_SIZE // 2
+                pygame.draw.line(surface, color, 
+                                (x, board_y),
+                                (x, board_y + self.board.size * CELL_SIZE), 8)
+            elif line_type == "diag":
+                if index == 0:
+                    pygame.draw.line(surface, color, 
+                                    (board_x, board_y),
+                                    (board_x + self.board.size * CELL_SIZE, 
+                                     board_y + self.board.size * CELL_SIZE), 8)
+                else:
+                    pygame.draw.line(surface, color, 
+                                    (board_x + self.board.size * CELL_SIZE, board_y),
+                                    (board_x, board_y + self.board.size * CELL_SIZE), 8)
+        
+        # Draw game over message
+        if self.game_over:
+            # Semi-transparent overlay
+            overlay = pygame.Surface((WIDTH, HEIGHT), pygame.SRCALPHA)
+            overlay.fill((0, 0, 0, 180))
+            surface.blit(overlay, (0, 0))
+            
+            if self.winner:
+                message = f"{self.winner.symbol} Wins!"
+                color = self.winner.color
+            else:
+                message = "It's a Draw!"
+                color = TEXT_COLOR
+            
+            text = TITLE_FONT.render(message, True, color)
+            surface.blit(text, (WIDTH//2 - text.get_width()//2, HEIGHT//3))
+            
+            restart = BUTTON_FONT.render("Press any key to continue", True, TEXT_COLOR)
+            surface.blit(restart, (WIDTH//2 - restart.get_width()//2, HEIGHT//2))
+        
+        # Draw buttons
+        for button in self.buttons:
+            button.draw(surface)
+            
+        # Draw controls info
+        controls = INFO_FONT.render("Controls: Mouse click | Arrow keys + Enter | Number keys 1-9", True, (180, 180, 200))
+        surface.blit(controls, (WIDTH//2 - controls.get_width()//2, HEIGHT - 30))
+
+def main():
+    clock = pygame.time.Clock()
+    game = Game()
+    
+    # Create a surface for the game
+    game_surface = pygame.Surface((WIDTH, HEIGHT))
+    
+    # Main game loop
+    running = True
+    while running:
+        mouse_pos = pygame.mouse.get_pos()
+        
+        # Handle events
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                running = False
+            
+            # Handle keyboard events
+            elif event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_ESCAPE:
+                    if game.current_screen == "game":
+                        game.return_to_menu()
+                    else:
+                        running = False
+                
+                # Handle number keys for quick selection
+                elif game.current_screen == "game" and not game.game_over and not game.get_current_player().is_computer():
+                    max_cell = game.board.size * game.board.size
+                    if pygame.K_1 <= event.key <= pygame.K_9 and max_cell <= 9:
+                        num = event.key - pygame.K_0
+                        if 1 <= num <= max_cell:
+                            row = (num - 1) // game.board.size
+                            col = (num - 1) % game.board.size
+                            game.handle_click((
+                                (WIDTH - game.board.size * CELL_SIZE) // 2 + col * CELL_SIZE + 1,
+                                (HEIGHT - game.board.size * CELL_SIZE) // 2 + row * CELL_SIZE + 1
+                            ))
+                
+                # Handle custom input
+                if game.current_screen == "custom_size" and game.input_box:
+                    result = game.input_box.handle_event(event)
+                    if result:
+                        try:
+                            size = int(result)
+                            if 3 <= size <= 8:
+                                game.start_game(size)
+                        except ValueError:
+                            pass
+            
+            # Handle mouse events
+            elif event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
+                # Handle board clicks
+                if game.current_screen == "game" and not game.input_box:
+                    game.handle_click(event.pos)
+                
+                # Check buttons
+                for button in game.buttons:
+                    button.handle_event(event)
+                
+                # Handle custom input box
+                if game.current_screen == "custom_size" and game.input_box:
+                    game.input_box.handle_event(event)
+        
+        # Update button hover states
+        for button in game.buttons:
+            button.check_hover(mouse_pos)
+        
+        # Update game state
+        game.update()
+        
+        # Draw everything
+        game.draw(game_surface)
+        
+        # Draw game surface to screen
+        screen.blit(game_surface, (0, 0))
+        pygame.display.flip()
+        
+        # Cap the frame rate
+        clock.tick(60)
+    
+    pygame.quit()
+    sys.exit()
+
+if __name__ == "__main__":
+    main()
+            </code></pre>
+        </div>
+        
+        <div class="features">
+            <div class="feature">
+                <i class="fas fa-desktop"></i>
+                <span>Responsive Design</span>
+            </div>
+            <div class="feature">
+                <i class="fas fa-clipboard-check"></i>
+                <span>Copy to Clipboard</span>
+            </div>
+            <div class="feature">
+                <i class="fas fa-code"></i>
+                <span>Syntax Highlighted</span>
+            </div>
+            <div class="feature">
+                <i class="fas fa-scroll"></i>
+                <span>Scrollable Code</span>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.getElementById('copyButton').addEventListener('click', function() {
+            const codeElement = document.querySelector('.code-block code');
+            const textArea = document.createElement('textarea');
+            textArea.value = codeElement.textContent;
+            document.body.appendChild(textArea);
+            textArea.select();
+            document.execCommand('copy');
+            document.body.removeChild(textArea);
+            
+            // Visual feedback
+            const button = this;
+            button.classList.add('copied');
+            button.innerHTML = '<i class="fas fa-check"></i> ';
+            
+            setTimeout(() => {
+                button.classList.remove('copied');
+                button.innerHTML = '<i class="fas fa-copy"></i> Copy Code';
+            }, 2000);
+        });
+    </script>
+</body>
+</html>

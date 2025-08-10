@@ -1,0 +1,404 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Snake Game Python Code</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #1a2a6c, #b21f1f, #fdbb2d);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+        
+        .container {
+            background: rgba(34, 34, 59, 0.95);
+            border-radius: 18px;
+            box-shadow: 0 12px 32px rgba(0, 0, 0, 0.25);
+            padding: 35px;
+            max-width: 800px;
+            width: 95%;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .container::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 5px;
+            background: linear-gradient(90deg, #00ffcc, #0077ff, #ff00cc);
+        }
+        
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 25px;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+        
+        h1 {
+            color: #00ffcc;
+            font-weight: 700;
+            letter-spacing: 1px;
+            font-size: 2.2rem;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+        }
+        
+        .controls {
+            display: flex;
+            gap: 15px;
+        }
+        
+        .copy-btn {
+            background: linear-gradient(135deg, #00ccff, #0077ff);
+            color: white;
+            border: none;
+            border-radius: 50px;
+            padding: 12px 25px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 12px rgba(0, 119, 255, 0.3);
+        }
+        
+        .copy-btn:hover {
+            background: linear-gradient(135deg, #00e6ff, #0066ff);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 15px rgba(0, 119, 255, 0.4);
+        }
+        
+        .copy-btn:active {
+            transform: translateY(1px);
+        }
+        
+        .copy-btn.copied {
+            background: linear-gradient(135deg, #00ff88, #00cc66);
+        }
+        
+        .copy-btn.copied::after {
+            content: 'Copied!';
+        }
+        
+        .code-container {
+            position: relative;
+        }
+        
+        .code-block {
+            background: #1e1e2e;
+            color: #e0e0e0;
+            border-radius: 12px;
+            padding: 25px;
+            font-size: 0.95rem;
+            overflow-x: auto;
+            box-shadow: inset 0 0 15px rgba(0, 0, 0, 0.5);
+            max-height: 70vh;
+            line-height: 1.5;
+            position: relative;
+        }
+        
+        .code-block code {
+            font-family: 'Fira Code', 'Consolas', 'Menlo', 'Monaco', monospace;
+            display: block;
+            white-space: pre;
+        }
+        
+        .features {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 25px;
+            color: #a0a0c0;
+            font-size: 0.9rem;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+        
+        .feature {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .feature i {
+            color: #00ffcc;
+        }
+        
+        .language-tag {
+            position: absolute;
+            top: 10px;
+            right: 20px;
+            background: rgba(0, 255, 204, 0.15);
+            color: #00ffcc;
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 600;
+        }
+        
+        /* Scrollbar styling */
+        .code-block::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+        
+        .code-block::-webkit-scrollbar-track {
+            background: #2a2a3a;
+            border-radius: 10px;
+        }
+        
+        .code-block::-webkit-scrollbar-thumb {
+            background: #00ccff;
+            border-radius: 10px;
+        }
+        
+        .code-block::-webkit-scrollbar-thumb:hover {
+            background: #00aaff;
+        }
+        
+        @media (max-width: 600px) {
+            .container {
+                padding: 25px 15px;
+            }
+            
+            h1 {
+                font-size: 1.8rem;
+            }
+            
+            .copy-btn {
+                padding: 10px 20px;
+                font-size: 0.9rem;
+            }
+            
+            .code-block {
+                padding: 20px 15px;
+                font-size: 0.85rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1><i class="fas fa-code"></i>Snake Game Python Code</h1>
+            <div class="controls">
+                <button id="copyButton" class="copy-btn">
+                    <i class="fas fa-copy"></i> Copy Code
+                </button>
+            </div>
+        </div>
+        
+        <div class="code-container">
+            <span class="language-tag">Python</span>
+            <pre class="code-block"><code>
+import random
+import curses
+
+def main(stdscr):
+    curses.curs_set(0)
+    curses.start_color()
+    # Define color pairs: (pair_number, foreground, background)
+    curses.init_pair(1, curses.COLOR_GREEN, curses.COLOR_BLACK)   # Snake
+    curses.init_pair(2, curses.COLOR_RED, curses.COLOR_BLACK)     # Food
+    curses.init_pair(3, curses.COLOR_WHITE, curses.COLOR_BLUE)    # Background/border
+    curses.init_pair(4, curses.COLOR_YELLOW, curses.COLOR_BLACK)  # Score
+    curses.init_pair(5, curses.COLOR_MAGENTA, curses.COLOR_BLUE)  # Wall
+
+    while True:
+        sh, sw = stdscr.getmaxyx()
+        win = curses.newwin(sh, sw, 0, 0)
+        win.keypad(1)
+        win.timeout(100)
+
+        snk_x = sw // 4
+        snk_y = sh // 2
+        snake = [
+            [snk_y, snk_x],
+            [snk_y, snk_x - 1],
+            [snk_y, snk_x - 2]
+        ]
+        # Food never on wall
+        food = [random.randint(2, sh - 3), random.randint(2, sw - 3)]
+        win.bkgd(' ', curses.color_pair(3))  # Set background color
+        win.addch(food[0], food[1], '◆', curses.color_pair(2) | curses.A_BOLD)
+
+        direction = 'd'  # Start moving right
+        score = 0
+        game_over = False
+
+        while not game_over:
+            win.clear()
+            win.bkgd(' ', curses.color_pair(3))  # Redraw background
+
+            # Modern border using box-drawing characters
+            horizontal = '─'
+            vertical = '│'
+            tl = '┌'
+            tr = '┐'
+            bl = '└'
+            br = '┘'
+            for x in range(1, sw-2):
+                win.addch(0, x, horizontal, curses.color_pair(5) | curses.A_BOLD)
+                win.addch(sh-2, x, horizontal, curses.color_pair(5) | curses.A_BOLD)
+            for y in range(1, sh-2):
+                win.addch(y, 0, vertical, curses.color_pair(5) | curses.A_BOLD)
+                win.addch(y, sw-2, vertical, curses.color_pair(5) | curses.A_BOLD)
+            win.addch(0, 0, tl, curses.color_pair(5) | curses.A_BOLD)
+            win.addch(0, sw-2, tr, curses.color_pair(5) | curses.A_BOLD)
+            win.addch(sh-2, 0, bl, curses.color_pair(5) | curses.A_BOLD)
+            win.addch(sh-2, sw-2, br, curses.color_pair(5) | curses.A_BOLD)
+
+            # Score bar
+            score_str = f' Score: {score} '
+            score_x = (sw - len(score_str)) // 2
+            win.addstr(0, score_x, score_str, curses.color_pair(4) | curses.A_BOLD)
+
+            # Draw food (never on wall)
+            win.addch(food[0], food[1], '◆', curses.color_pair(2) | curses.A_BOLD)
+
+            # Draw snake (head is brighter)
+            for idx, part in enumerate(snake):
+                if idx == 0:
+                    win.addch(part[0], part[1], '●', curses.color_pair(4) | curses.A_BOLD)
+                else:
+                    win.addch(part[0], part[1], '●', curses.color_pair(1) | curses.A_BOLD)
+                # Shadow effect (optional, only if space allows)
+                if part[1]+1 < sw-2 and part[0]+1 < sh-2:
+                    win.addch(part[0]+1, part[1]+1, '.', curses.color_pair(3))
+
+            next_key = win.getch()
+            if next_key != -1:
+                try:
+                    char = chr(next_key).lower()
+                except:
+                    char = ''
+                # Prevent reverse direction
+                if (char == 'w' and direction != 's'):
+                    direction = 'w'
+                elif (char == 's' and direction != 'w'):
+                    direction = 's'
+                elif (char == 'a' and direction != 'd'):
+                    direction = 'a'
+                elif (char == 'd' and direction != 'a'):
+                    direction = 'd'
+
+            # Calculate new head
+            new_head = [snake[0][0], snake[0][1]]
+            if direction == 's':
+                new_head[0] += 1
+            if direction == 'w':
+                new_head[0] -= 1
+            if direction == 'd':
+                new_head[1] += 1
+            if direction == 'a':
+                new_head[1] -= 1
+
+            # Check for collision
+            if (new_head[0] in [0, sh-2] or
+                new_head[1] in [0, sw-2] or
+                new_head in snake):
+                # Modern Game Over box
+                box_w = 32
+                box_h = 5
+                box_y = sh//2 - box_h//2
+                box_x = sw//2 - box_w//2
+                for i in range(box_h):
+                    for j in range(box_w):
+                        win.addch(box_y+i, box_x+j, ' ', curses.color_pair(3))
+                msg = f" GAME OVER! FINAL SCORE: {score} "
+                win.addstr(box_y+2, box_x + (box_w-len(msg))//2, msg, curses.color_pair(4) | curses.A_BOLD)
+                win.refresh()
+                curses.napms(1800)
+                game_over = True
+                break
+
+            snake.insert(0, new_head)
+            if snake[0] == food:
+                score += 1
+                win.timeout(max(40, 60 - score * 2))
+                while True:
+                    # Food never on wall
+                    food = [random.randint(2, sh - 3), random.randint(2, sw - 3)]
+                    if food not in snake:
+                        break
+            else:
+                tail = snake.pop()
+
+        # Play again prompt
+        win.clear()
+        win.bkgd(' ', curses.color_pair(3))
+        win.border(0)
+        prompt = "Play again? (y/n): "
+        win.addstr(sh//2, sw//2 - len(prompt)//2, prompt, curses.color_pair(4) | curses.A_BOLD)
+        win.refresh()
+        while True:
+            choice = win.getch()
+            if choice in [ord('y'), ord('Y')]:
+                break  # Restart the game loop
+            elif choice in [ord('n'), ord('N')]:
+                return  # Exit the game
+                curses.wrapper(main)
+            </code></pre>
+        </div>
+        
+        <div class="features">
+            <div class="feature">
+                <i class="fas fa-desktop"></i>
+                <span>Responsive Design</span>
+            </div>
+            <div class="feature">
+                <i class="fas fa-clipboard-check"></i>
+                <span>Copy to Clipboard</span>
+            </div>
+            <div class="feature">
+                <i class="fas fa-code"></i>
+                <span>Syntax Highlighted</span>
+            </div>
+            <div class="feature">
+                <i class="fas fa-scroll"></i>
+                <span>Scrollable Code</span>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.getElementById('copyButton').addEventListener('click', function() {
+            const codeElement = document.querySelector('.code-block code');
+            const textArea = document.createElement('textarea');
+            textArea.value = codeElement.textContent;
+            document.body.appendChild(textArea);
+            textArea.select();
+            document.execCommand('copy');
+            document.body.removeChild(textArea);
+            
+            // Visual feedback
+            const button = this;
+            button.classList.add('copied');
+            button.innerHTML = '<i class="fas fa-check"></i> ';
+            
+            setTimeout(() => {
+                button.classList.remove('copied');
+                button.innerHTML = '<i class="fas fa-copy"></i> Copy Code';
+            }, 2000);
+        });
+    </script>
+</body>
+</html>
